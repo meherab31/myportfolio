@@ -52,4 +52,8 @@ class User extends Authenticatable
     public function about(){
         return $this->hasOne(About::class);
     }
+
+    public function experiences(){
+        return $this->hasMany( Experience::class);
+    }
 }
