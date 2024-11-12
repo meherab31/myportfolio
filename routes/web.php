@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\ExperienceController;
 use App\Http\Middleware\IsAdmin;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\EducationController;
 
 
 Route::get('/', function () {
@@ -30,5 +31,11 @@ Route::prefix('admin')->middleware(['auth', IsAdmin::class])->group(function () 
     Route::post('/experiences/store', [ExperienceController::class, 'store'])->name('experiences.store');
     Route::put('/experiences/update/{id}', [ExperienceController::class, 'update'])->name('experiences.update');
     Route::delete('experiences/{id}', [ExperienceController::class, 'destroy'])->name('experiences.destroy');
+
+    //Educations
+    Route::get('/educations', [EducationController::class, 'index'])->name('educations.index');
+    Route::post('/educations/store', [EducationController::class, 'store'])->name('educations.store');
+    Route::put('/educations/update/{id}', [EducationController::class, 'update'])->name('educations.update');
+    Route::delete('educations/{id}', [EducationController::class, 'destroy'])->name('educations.destroy');
 });
 
