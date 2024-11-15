@@ -7,6 +7,8 @@ use App\Http\Controllers\Admin\ExperienceController;
 use App\Http\Middleware\IsAdmin;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\EducationController;
+use App\Http\Controllers\Admin\SkillsController;
+use App\Http\Controllers\Admin\ProjectController;
 
 
 Route::get('/', function () {
@@ -37,5 +39,29 @@ Route::prefix('admin')->middleware(['auth', IsAdmin::class])->group(function () 
     Route::post('/educations/store', [EducationController::class, 'store'])->name('educations.store');
     Route::put('/educations/update/{id}', [EducationController::class, 'update'])->name('educations.update');
     Route::delete('educations/{id}', [EducationController::class, 'destroy'])->name('educations.destroy');
+
+    Route::prefix('skills')->name('skills.')->group(function () {
+        Route::get('/', [SkillsController::class, 'index'])->name('index');
+
+        // Category Routes
+        Route::get('/category/create', [SkillsController::class, 'createCategory'])->name('category.create');
+        Route::post('/category/store', [SkillsController::class, 'storeCategory'])->name('category.store');
+        Route::get('/category/edit/{id}', [SkillsController::class, 'editCategory'])->name('category.edit');
+        Route::put('/category/update/{id}', [SkillsController::class, 'updateCategory'])->name('category.update');
+        Route::delete('/category/delete/{id}', [SkillsController::class, 'deleteCategory'])->name('category.delete');
+
+        // Skill Routes
+        Route::get('/create', [SkillsController::class, 'createSkill'])->name('skill.create');
+        Route::post('/store', [SkillsController::class, 'storeSkill'])->name('skill.store');
+        Route::get('/edit/{id}', [SkillsController::class, 'editSkill'])->name('skill.edit');
+        Route::put('/update/{id}', [SkillsController::class, 'updateSkill'])->name('skill.update');
+        Route::delete('/delete/{id}', [SkillsController::class, 'deleteSkill'])->name('skill.delete');
+    });
+
+    //Projects Routes
+    Route::get('/projects', [ProjectController::class, 'index'])->name('projects.index');
+    Route::post('/projects', [ProjectController::class, 'store'])->name('projects.store');
+    Route::put('/projects/{id}', [ProjectController::class, 'update'])->name('projects.update');
+    Route::delete('/projects/{id}', [ProjectController::class, 'destroy'])->name('projects.destroy');
 });
 

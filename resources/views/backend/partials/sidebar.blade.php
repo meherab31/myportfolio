@@ -8,15 +8,18 @@
             <a href="{{ route('about') }}" class="nav-item nav-link"><i class="fa fa-info-circle me-2"></i>About</a>
             <a href="{{ route('experiences.index') }}" class="nav-item nav-link"><i class="fa fa-briefcase me-2"></i>Experiences</a>
             <a href="{{ route('educations.index') }}" class="nav-item nav-link"><i class="mdi mdi-school-outline me-2"></i>Education</a>
-            {{-- <div class="nav-item dropdown">
-                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>Elements</a>
+
+            <!-- Skills Dropdown Menu -->
+            <div class="nav-item dropdown">
+                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-trophy me-2"></i>Skills</a>
                 <div class="dropdown-menu bg-transparent border-0">
-                    <a href="button.html" class="dropdown-item">Buttons</a>
-                    <a href="typography.html" class="dropdown-item">Typography</a>
-                    <a href="element.html" class="dropdown-item">Other Elements</a>
+                    <a href="{{ route('skills.index') }}" class="dropdown-item">Manage Skills</a>
+                    <a href="{{ route('skills.category.create') }}" class="dropdown-item">Add New Category</a>
+                    <a href="{{ route('skills.skill.create') }}" class="dropdown-item">Add New Skill</a>
                 </div>
-            </div> --}}
-            <a href="form.html" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Forms</a>
+            </div>
+
+            <a href="{{ route('projects.index') }}" class="nav-item nav-link"><i class="mdi mdi-file-multiple me-2"></i>Projects</a>
             <a href="table.html" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Tables</a>
             <a href="chart.html" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Charts</a>
             <div class="nav-item dropdown">
