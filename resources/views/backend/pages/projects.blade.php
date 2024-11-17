@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container mt-5 mb-5">
-    <div class="card shadow-lg p-4 border-0 rounded">
+    <div class="card shadow-lg p-4">
         <h2 class="mb-4 text-primary text-center">Manage Projects</h2>
 
         <!-- Success Message -->
@@ -12,13 +12,13 @@
 
         <!-- Add Project Button -->
         <div class="d-flex justify-content-end mb-3">
-            <button type="button" class="btn btn-outline-primary rounded-pill" data-bs-toggle="modal" data-bs-target="#addProjectModal" onclick="resetAddModal()">Add New Project</button>
+            <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#addProjectModal" onclick="resetAddModal()">Add New Project</button>
         </div>
 
         <!-- Projects Table -->
         <div class="table-responsive">
-            <table class="table table-hover table-striped">
-                <thead class="thead-light">
+            <table class="table table-hover">
+                <thead class="thead-dark">
                     <tr>
                         <th>Thumbnail</th>
                         <th>Project Title</th>
@@ -32,18 +32,18 @@
                 <tbody>
                     @foreach($projects as $project)
                     <tr>
-                        <td> <img src="{{ asset('storage/' . $project->image) }}" alt="Image of {{ $project->title }}" width="50" height="auto"> </td>
+                        <td> <img src="{{ asset('storage/' . $project->image) }}" alt="Image of {{ $project->title }}" width="20" height="auto"> </td>
                         <td>{{ $project->title }}</td>
                         <td>{{ $project->skillCategory->name }}</td>
                         <td>{{ implode(', ', json_decode($project->technologies)) }}</td>
                         <td>{{ $project->github_link }}</td>
                         <td>{{ $project->live_demo_link }}</td>
                         <td class="d-flex">
-                            <button type="button" class="btn btn-sm btn-outline-warning me-2 rounded" data-bs-toggle="modal" data-bs-target="#editProjectModal" onclick="editProject({{ json_encode($project) }})">Edit</button>
-                            <form action="{{ route('projects.destroy', $project->id) }}" method="POST" class="ms-2">
+                            <button type="button" class="btn btn-sm btn-outline-warning me-2" data-bs-toggle="modal" data-bs-target="#editProjectModal" onclick="editProject({{ json_encode($project) }})">Edit</button>
+                            <form action="{{ route('projects.destroy', $project->id) }}" method="POST">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-sm btn-outline-danger rounded" onclick="return confirm('Are you sure you want to delete this project?');">Delete</button>
+                                <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Are you sure you want to delete this project?');">Delete</button>
                             </form>
                         </td>
                     </tr>
@@ -60,9 +60,9 @@
         <div class="modal-content">
             <form id="addProjectForm" action="{{ route('projects.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
-                <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title" id="addProjectModalLabel">Add Project</h5>
-                    <button type="button" class="close text-white" data-bs-dismiss="modal" aria-label="Close">
+                <div class="modal-header">
+                    <h5 class="modal-title text-primary" id="addProjectModalLabel">Add Project</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -112,9 +112,9 @@
             <form id="editProjectForm" action="{{ route('projects.update', '') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
-                <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title" id="editProjectModalLabel">Edit Project</h5>
-                    <button type="button" class="close text-white" data-bs-dismiss="modal" aria-label="Close">
+                <div class="modal-header">
+                    <h5 class="modal-title text-primary" id="editProjectModalLabel">Edit Project</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -133,7 +133,6 @@
                         <select class="form-select" id="edit_skill_category_id" name="skill_category_id" required>
                             @foreach($categories as $category)
                                 <option value="{{ $category->id }}"
-
                                     {{ old('skill_category_id', optional($project)->skill_category_id) == $category->id ? 'selected' : '' }}>
                                     {{ $category->name }}
                                 </option>
@@ -164,37 +163,45 @@
                         <label for="edit_image" class="form-label">Project Image</label>
                         <input type="file" class="form-control" id="edit_image" name="image">
                     </div>
-
-                    <!-- Display the current image -->
-                    <div class="mb-3" id="current-image-container">
-                        <label class="form-label">Current Image</label>
-                        <img id="current-image" src="{{ asset('storage/' . optional($project)->image) }}" width="100" height="auto" alt="Current project image">
-                    </div>
+                                        <!-- Display the current image -->
+                                        <div class="mb-3" id="current-image-container">
+                                            <div id="current_image">
+                                                <!-- Display existing image if it exists -->
+                                                @if (optional($project)->image)
+                                                    <small class="form-text text-muted">Current image:
+                                                        <img src="{{ asset('storage/' . $project->image) }}" alt="Current Project Image" class="img-thumbnail mt-2" width="100">
+                                                    </small>
+                                                @endif
+                                            </div>
+                                        </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-warning">Update Project</button>
+                    <button type="submit" class="btn btn-primary">Update Project</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
 
+@endsection
+
+@push('scripts')
 <script>
-    // Reset Add Project Modal
     function resetAddModal() {
-        document.getElementById('addProjectForm').reset();
+        $('#addProjectForm')[0].reset();
+        $('#addProjectModalLabel').text('Add Project');
     }
 
-    // Populate Edit Modal with project data
     function editProject(project) {
-        document.getElementById('editProjectId').value = project.id;
-        document.getElementById('edit_title').value = project.title;
-        document.getElementById('edit_skill_category_id').value = project.skill_category_id;
-        document.getElementById('edit_technologies').value = project.technologies.join(', ');
-        document.getElementById('edit_github_link').value = project.github_link;
-        document.getElementById('edit_live_demo_link').value = project.live_demo_link;
-        document.getElementById('current-image').src = "/storage/" + project.image;
+        $('#editProjectForm').attr('action', '/admin/projects/' + project.id);
+        $('#editProjectId').val(project.id);
+        $('#editProjectModalLabel').text('Edit Project');
+        $('#edit_title').val(project.title);
+        $('#edit_skill_category_id').val(project.skill_category_id);
+        $('#edit_technologies').val(project.technologies.join(', '));
+        $('#edit_github_link').val(project.github_link);
+        $('#edit_live_demo_link').val(project.live_demo_link);
     }
 </script>
-@endsection
+@endpush
